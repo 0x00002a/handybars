@@ -19,14 +19,18 @@ use handybars::{Context, Variable};
 let ctx = Context::new().with_define("hello".parse().unwrap(), "world");
 assert_eq!(ctx.render("hello {{ hello }}"), Ok("hello world".to_owned()));
 ```
+
 You can also define objects
+
 ```rust
 # use handybars::{Context, Variable, Object};
 # let mut ctx = Context::new().with_define("hello".parse().unwrap(), "world");
 ctx.define("obj".parse().unwrap(), Object::new().with_property("a", "value"));
 assert_eq!(ctx.render("object a: {{ obj.a }}"), Ok("object a: value".to_owned()));
 ```
+
 You can even have nested objects
+
 ```rust
 # use handybars::{Context, Variable, Object};
 # let mut ctx = Context::new().with_define("hello".parse().unwrap(), "world");
@@ -41,21 +45,16 @@ use handybars::{Context, Variable, Object, Error};
 let ctx = Context::new().with_define("world".parse().unwrap(), Object::new().with_property("a", "p1"));
 assert_eq!(ctx.render("{{world}}"), Err(Error::TriedToExpandObject(Variable::single("world"))));
 ```
+
 ## Macros Usage
-Make sure to include the `macros` feature for the Handybar dependenc in `Cargo.toml`:
-```toml
-[dependencies]
-handybars = { version = "0.2", features = [ "macros" ] }
-```
-Import the handybars and the macro in your rust code:
+
+Usage of these requires the `macros` feature.
+
+Enums are converted to [Value::String](https://docs.rs/handybars/latest/handybars/enum.Value.html) variants:
+
 ```rust
 # #[cfg(feature = "macros")]
 use handybars::handybars_value;
-```
-Use simple enums as [Value::String](https://docs.rs/handybars/latest/handybars/enum.Value.html) variants:
-```rust
-# #[cfg(feature = "macros")]
-# use handybars::handybars_value;
 # #[cfg(feature = "macros")]
 #[handybars_value]
 enum SimpleEnumProp {
@@ -63,7 +62,9 @@ enum SimpleEnumProp {
     B,
 }
 ```
+
 Use structs as [Value::Object](https://docs.rs/handybars/latest/handybars/enum.Value.html) variants::
+
 ```rust
 # #[cfg(feature = "macros")]
 # use handybars::handybars_value;
@@ -82,7 +83,9 @@ struct StructVal<'a> {
     field_4: SimpleEnumProp,
 }
 ```
+
 Combine enums and structs into more complex objects:
+
 ```rust
 # #[cfg(feature = "macros")]
 # use handybars::handybars_value;
@@ -110,7 +113,9 @@ struct TestObject<'a> {
     prop_4: SimpleEnumProp,
 }
 ```
-Example on using the above enums and structs:
+
+It also works on nested structs:
+
 ```rust
 # #[cfg(feature = "macros")]
 # use handybars::{ Context, Variable, handybars_value};
@@ -159,9 +164,9 @@ assert_eq!("A", c.render("{{ obj.prop_3.field_4 }}").unwrap());
 # #[cfg(feature = "macros")]
 assert_eq!("f33_val", c.render("{{ obj.prop_3.field_3 }}").unwrap());
 ```
-The running code for the above can be found as a [macro test case](tests/handybars_macro.rs).
 
 Enums with variant values are currently **not supported**. Enum with variants like the following **will not compile**:
+
 ```compile_fail
 #[handybars_value]
 enum ComplexEnumProp<'a> {
