@@ -113,7 +113,7 @@ impl<'a> Context<'a> {
                             o.add_property(s, value.take().unwrap());
                         }
                     })
-                    .or_insert(value.take().unwrap().into());
+                    .or_insert_with(|| value.take().unwrap().into());
             }
         }
         self
@@ -301,5 +301,12 @@ mod tests {
         .collect();
         assert_eq!(ctx.render("{{a}}"), Ok("b".to_owned()));
         assert_eq!(ctx.render("{{b}}"), Ok("c".to_owned()));
+    }
+    #[test]
+    fn double_defintition_should_overwrite() {
+        let ctx = Context::new()
+        .with_define(Variable::single("a"), "b")
+        .with_define(Variable::single("a"), "c");
+        assert_eq!(ctx.render("{{a}}"), Ok("c".to_owned()));
     }
 }
