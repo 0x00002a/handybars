@@ -1,6 +1,6 @@
 [package]
 name = "handybars"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 license = "MIT"
 authors = ["0x00002a"]
@@ -8,13 +8,13 @@ readme = "README.md"
 description = "Minimal template parsing and expansion"
 
 [features]
-macros = [ "dep:handybars_macros" ]
+macros = ["dep:handybars_macros"]
 
 [package.metadata."docs.rs"]
 all-features = true
 
 [workspace]
-members = [ "." , "macros" ]
+members = [".", "macros"]
 
 [dependencies]
 handybars_macros = { path = "macros", optional = true }
