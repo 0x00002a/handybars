@@ -17,7 +17,7 @@ all-features = true
 members = [".", "macros"]
 
 [dependencies]
-handybars_macros = { path = "macros", optional = true }
+handybars_macros = { path = "macros", optional = true, version = "0.2.0" }
 
 [dev-dependencies]
 proptest = "1.0.0"
